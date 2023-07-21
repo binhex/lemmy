@@ -1,0 +1,10 @@
+lemmy:
+    lemmy_instance: https://feddit.uk
+    community_name: 'unraid'
+
+youtube:
+    youtube_query: 'unraid'
+    youtube_query_result_limit: 10
+    youtube_query_language: en
+    youtube_min_duration: '5:00'
+    youtube_channel_search: ['Spaceinvader One', 'IBRACORP']
