@@ -164,7 +164,7 @@ def youtube_video_search():
 if __name__ == '__main__':
 
     # get credentials from env var secrets
-    lemmy_username = os.getenv('LEMMY_USENAME', '')
+    lemmy_username = os.getenv('LEMMY_USERNAME', '')
     lemmy_password = os.getenv('LEMMY_PASSWORD', '')
 
     # read in config file
