@@ -22,7 +22,7 @@ def read_config():
 def login_to_lemmy():
 
     lemmy_instance = Lemmy(lemmy_instance_url)
-    lemmy_instance.log_in(lemmy_user, lemmy_password)
+    lemmy_instance.log_in(lemmy_username, lemmy_password)
     lemmy_instance_community_id = lemmy_instance.discover_community(community_name)
 
     return lemmy_instance, lemmy_instance_community_id
@@ -164,7 +164,7 @@ def youtube_video_search():
 if __name__ == '__main__':
 
     # get credentials from env var secrets
-    lemmy_user = os.getenv('LEMMY_USER', '')
+    lemmy_username = os.getenv('LEMMY_USENAME', '')
     lemmy_password = os.getenv('LEMMY_PASSWORD', '')
 
     # read in config file
