@@ -11,17 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download and unpack GitHub CLI
-        uses: nick-fields/retry@v2
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 120
-          command: |
-            cd /tmp
-            curl -o './github-cli.tar.gz' -L 'https://github.com/cli/cli/releases/download/v1.10.0/gh_1.10.0_linux_amd64.tar.gz'
-            tar -xvf './github-cli.tar.gz'
-            sudo cp ./gh*linux_amd64/bin/gh '/usr/local/bin/'
       - name: Change directory to workspace
         uses: nick-fields/retry@v2
         with:
@@ -30,7 +19,7 @@ jobs:
           retry_wait_seconds: 120
           command: |
             cd "${GITHUB_WORKSPACE}"
-      - name: Run Trigger Docker Builds (TDB)
+      - name: Run Lemmy
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 60
