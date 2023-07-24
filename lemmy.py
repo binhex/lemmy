@@ -22,7 +22,10 @@ def read_config():
 def login_to_lemmy():
 
     lemmy_instance = Lemmy(lemmy_instance_url)
-    lemmy_instance.log_in(lemmy_username, lemmy_password)
+    try:
+        lemmy_instance.log_in(lemmy_username, lemmy_password)
+    except:
+        print("error in logging in, my exception!")
     lemmy_instance_community_id = lemmy_instance.discover_community(community_name)
 
     return lemmy_instance, lemmy_instance_community_id
