@@ -51,7 +51,7 @@ def search_lemmy_posts(youtube_video_title):
         page_number_int += 1
 
     if youtube_video_title in lemmy_search_post_name_list:
-        print(f"YouTube title '{youtube_video_title}' found in existing Lemmy post titles, skipping post...")
+        print(f"[SKIP] YouTube title '{youtube_video_title}' found in existing Lemmy post titles, skipping post...")
         return False
 
     return True
@@ -70,7 +70,7 @@ def youtube_duration_detect(youtube_video_title, youtube_video_duration):
 
     if youtube_duration_time_object < youtube_min_duration_time_object:
         print(
-            f"Duration length '{youtube_video_duration}' for YouTube title '{youtube_video_title}' is less than minimum value '{youtube_min_duration}', skipping post...")
+            f"[SKIP] Duration length '{youtube_video_duration}' for YouTube title '{youtube_video_title}' is less than minimum value '{youtube_min_duration}', skipping post...")
         return False
 
     return True
@@ -84,15 +84,15 @@ def youtube_language_detect(youtube_video_title):
 
     except langdetect.lang_detect_exception.LangDetectException:
 
-        print(f"Language code not detectable for YouTube title '{youtube_video_title}', skipping post...")
+        print(f"[SKIP] Language code not detectable for YouTube title '{youtube_video_title}', skipping post...")
         return False
 
     if detect_language_code != 'en':
-        print(f"Language code '{detect_language_code}' for YouTube title '{youtube_video_title}' is not english, skipping post...")
+        print(f"[SKIP] Language code '{detect_language_code}' for YouTube title '{youtube_video_title}' is not english, skipping post...")
         return False
 
     if not youtube_video_title.isascii():
-        print(f"Non ASCII characters detected for YouTube title '{youtube_video_title}', skipping post...")
+        print(f"[SKIP] Non ASCII characters detected for YouTube title '{youtube_video_title}', skipping post...")
         return False
 
     return True
