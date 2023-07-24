@@ -26,6 +26,5 @@ jobs:
           command: |
             export LEMMY_USERNAME="${{ secrets.LEMMY_USERNAME }}"
             export LEMMY_PASSWORD="${{ secrets.LEMMY_PASSWORD }}"
-            #pip install -r ./requirements.txt
-            #python3 ./lemmy.py
-            ./lib/pex/lemmy.pex ./lemmy.py
+            pip install -r ./requirements.txt
+            python3 ./lemmy.py
