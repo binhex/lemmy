@@ -24,8 +24,6 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 120
           command: |
-            export LEMMY_USERNAME="${{ secrets.LEMMY_USERNAME }}"
-            export LEMMY_PASSWORD="${{ secrets.LEMMY_PASSWORD }}"
             pip install -r ./requirements.txt
       - name: Run Lemmy
         uses: nick-fields/retry@v2
@@ -34,4 +32,6 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 120
           command: |
+            export LEMMY_USERNAME="${{ secrets.LEMMY_USERNAME }}"
+            export LEMMY_PASSWORD="${{ secrets.LEMMY_PASSWORD }}"
             python3 ./lemmy.py
