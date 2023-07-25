@@ -90,7 +90,7 @@ def youtube_language_detect(youtube_video_title):
     if detect_language_code != 'en':
         print(f"[SKIP] Language code '{detect_language_code}' for YouTube title '{youtube_video_title}' is not english, skipping post...")
         return False
-
+    # TODO try and get comments or description from video and analyse for lang as well
     if not youtube_video_title.isascii():
         print(f"[SKIP] Non ASCII characters detected for YouTube title '{youtube_video_title}', skipping post...")
         return False
@@ -166,6 +166,14 @@ if __name__ == '__main__':
     # get credentials from env var secrets
     lemmy_username = os.getenv('LEMMY_USERNAME', '')
     lemmy_password = os.getenv('LEMMY_PASSWORD', '')
+
+    if not lemmy_username:
+        print(f"[ERROR] Lemmy username is not specified via env var 'LEMMY_USERNAME', exiting script...")
+        os._exit(1)
+
+    if not lemmy_password:
+        print(f"[ERROR] Lemmy password is not specified via env var 'LEMMY_PASSWORD', exiting script...")
+        os._exit(2)
 
     # read in config file
     config_yaml = read_config()
