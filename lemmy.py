@@ -4,6 +4,7 @@ from pythorhead import Lemmy
 import langdetect
 import yaml
 import os
+import sys
 
 
 def read_config():
@@ -65,12 +66,22 @@ def post_to_lemmy(youtube_video_title, youtube_video_link):
 
 def youtube_duration_detect(youtube_video_title, youtube_video_duration):
 
-    youtube_duration_time_object = datetime.strptime(youtube_video_duration, '%M:%S').time()
+    try:
+        youtube_duration_time_object = datetime.strptime(youtube_video_duration, '%H:%M:%S').time()
+    except ValueError:
+        try:
+            youtube_duration_time_object = datetime.strptime(youtube_video_duration, '%M:%S').time()
+        except ValueError:
+            try:
+                youtube_duration_time_object = datetime.strptime(youtube_video_duration, '%S').time()
+            except ValueError:
+                print(f"Unable to determine datetime from YouTube duration string '{youtube_video_duration}', exiting script...")
+                sys.exit(3)
+
     youtube_min_duration_time_object = datetime.strptime(youtube_min_duration, '%M:%S').time()
 
     if youtube_duration_time_object < youtube_min_duration_time_object:
-        print(
-            f"[SKIP] Duration length '{youtube_video_duration}' for YouTube title '{youtube_video_title}' is less than minimum value '{youtube_min_duration}', skipping post...")
+        print(f"[SKIP] Duration length '{youtube_video_duration}' for YouTube title '{youtube_video_title}' is less than minimum value '{youtube_min_duration}', skipping post...")
         return False
 
     return True
@@ -90,6 +101,7 @@ def youtube_language_detect(youtube_video_title):
     if detect_language_code != 'en':
         print(f"[SKIP] Language code '{detect_language_code}' for YouTube title '{youtube_video_title}' is not english, skipping post...")
         return False
+
     # TODO try and get comments or description from video and analyse for lang as well
     if not youtube_video_title.isascii():
         print(f"[SKIP] Non ASCII characters detected for YouTube title '{youtube_video_title}', skipping post...")
@@ -147,7 +159,7 @@ def youtube_video_search():
         youtube_video_title = youtube_result['title']
         youtube_video_duration = youtube_result['duration']
         youtube_video_link = youtube_result['link']
-
+        print(youtube_video_duration)
         if not youtube_duration_detect(youtube_video_title, youtube_video_duration):
             continue
 
@@ -169,11 +181,11 @@ if __name__ == '__main__':
 
     if not lemmy_username:
         print(f"[ERROR] Lemmy username is not specified via env var 'LEMMY_USERNAME', exiting script...")
-        os._exit(1)
+        sys.exit(1)
 
     if not lemmy_password:
         print(f"[ERROR] Lemmy password is not specified via env var 'LEMMY_PASSWORD', exiting script...")
-        os._exit(2)
+        sys.exit(2)
 
     # read in config file
     config_yaml = read_config()
