@@ -110,9 +110,9 @@ def youtube_language_detect(youtube_video_title):
     return True
 
 
+# noinspection PyTypeChecker
 def youtube_channel_search(channel_name_list):
 
-    youtube_list_dict = []
     for channel_name in channel_name_list:
 
         # get channel id for youtube unraid specific channels
@@ -147,19 +147,20 @@ def youtube_channel_search(channel_name_list):
         post_to_lemmy(youtube_video_title, youtube_video_link)
 
 
+# noinspection PyTypeChecker
 def youtube_video_search():
 
-    # search youtube for videos related to unraid
+    # search YouTube for videos related to unraid
     custom_search_result = CustomSearch(youtube_query, VideoSortOrder.uploadDate, limit=youtube_query_result_limit, language=youtube_query_language)
     youtube_results = custom_search_result.result()
 
-    # loop over youtube results
+    # loop over YouTube results
     for youtube_result in youtube_results['result']:
 
         youtube_video_title = youtube_result['title']
         youtube_video_duration = youtube_result['duration']
         youtube_video_link = youtube_result['link']
-        print(youtube_video_duration)
+
         if not youtube_duration_detect(youtube_video_title, youtube_video_duration):
             continue
 
@@ -207,5 +208,5 @@ if __name__ == '__main__':
     # define youtube channels that provide unraid content
     youtube_channel_search(youtube_channel_search_list)
 
-    # search for youtube videos related to unraid
+    # search for YouTube videos related to unraid
     youtube_video_search()
