@@ -29,10 +29,11 @@ def login_to_lemmy():
     return lemmy_instance, lemmy_instance_community_id
 
 
-def search_lemmy_posts(youtube_video_title):
+def search_lemmy_posts(youtube_video_title, youtube_video_url):
 
     page_number_int = 1
     lemmy_search_post_name_list = []
+    lemmy_search_post_url_list = []
 
     # loop over pages until the result is empty
     while True:
@@ -45,14 +46,28 @@ def search_lemmy_posts(youtube_video_title):
 
         # get post names and append to list
         for i in lemmy_search_result:
+
             lemmy_search_post_name = (i['post']['name'])
             lemmy_search_post_name_list.append(lemmy_search_post_name)
+
+            try:
+
+                lemmy_search_post_url = (i['post']['url'])
+                lemmy_search_post_url_list.append(lemmy_search_post_url)
+
+            except KeyError:
+
+                continue
 
         # increment page number
         page_number_int += 1
 
+    if youtube_video_url in lemmy_search_post_url_list:
+        print(f"[SKIP] YouTube URL '{youtube_video_url}' found in existing Lemmy post, skipping post...")
+        return False
+
     if youtube_video_title in lemmy_search_post_name_list:
-        print(f"[SKIP] YouTube title '{youtube_video_title}' found in existing Lemmy post titles, skipping post...")
+        print(f"[SKIP] YouTube title '{youtube_video_title}' found in existing Lemmy post, skipping post...")
         return False
 
     return True
@@ -141,7 +156,7 @@ def youtube_channel_search(channel_name_list):
         if not youtube_language_detect(youtube_video_title):
             continue
 
-        if not search_lemmy_posts(youtube_video_title):
+        if not search_lemmy_posts(youtube_video_title, youtube_video_link):
             continue
 
         post_to_lemmy(youtube_video_title, youtube_video_link)
@@ -167,7 +182,7 @@ def youtube_video_search():
         if not youtube_language_detect(youtube_video_title):
             continue
 
-        if not search_lemmy_posts(youtube_video_title):
+        if not search_lemmy_posts(youtube_video_title, youtube_video_link):
             continue
 
         post_to_lemmy(youtube_video_title, youtube_video_link)
