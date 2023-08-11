@@ -90,7 +90,7 @@ def youtube_duration_detect(youtube_video_title, youtube_video_duration):
             try:
                 youtube_duration_time_object = datetime.strptime(youtube_video_duration, '%S').time()
             except ValueError:
-                print(f"Unable to determine datetime from YouTube duration string '{youtube_video_duration}', exiting script...")
+                print(f"[ERROR] Unable to determine datetime from YouTube duration string '{youtube_video_duration}', exiting script...")
                 sys.exit(3)
 
     youtube_min_duration_time_object = datetime.strptime(youtube_min_duration, '%M:%S').time()
@@ -165,7 +165,7 @@ def youtube_channel_search(channel_name_list):
 # noinspection PyTypeChecker
 def youtube_video_search():
 
-    # search YouTube for videos related to unraid
+    # search YouTube for videos titles with keyword defined in youtube_query
     custom_search_result = CustomSearch(youtube_query, VideoSortOrder.uploadDate, limit=youtube_query_result_limit, language=youtube_query_language)
     youtube_results = custom_search_result.result()
 
@@ -176,15 +176,24 @@ def youtube_video_search():
         youtube_video_duration = youtube_result['duration']
         youtube_video_link = youtube_result['link']
 
+        # if youtube title does not contain query then skip
+        if youtube_query.lower() not in youtube_video_title.lower():
+            print(f"[SKIP] YouTube video title '{youtube_video_title}' does not contain query string '{youtube_query}'")
+            continue
+
+        # if duration of youtube video is less than defined value then skip
         if not youtube_duration_detect(youtube_video_title, youtube_video_duration):
             continue
 
+        # if language of youtube title does not match defined value then skip
         if not youtube_language_detect(youtube_video_title):
             continue
 
+        # if lemmy post title and/or youtube link already exist then skip
         if not search_lemmy_posts(youtube_video_title, youtube_video_link):
             continue
 
+        # if all checks passed then post to lemmy
         post_to_lemmy(youtube_video_title, youtube_video_link)
 
 
