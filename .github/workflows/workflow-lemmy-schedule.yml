@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Change directory to workspace
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 60
           max_attempts: 3
@@ -20,7 +20,7 @@ jobs:
           command: |
             cd "${GITHUB_WORKSPACE}"
       - name: Install requirements for Lemmy
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 60
           max_attempts: 3
@@ -28,7 +28,7 @@ jobs:
           command: |
             pip install -r ./requirements.txt
       - name: Run Lemmy
-        uses: nick-fields/retry@v2
+        uses: nick-fields/retry@v3
         with:
           timeout_minutes: 60
           max_attempts: 3
