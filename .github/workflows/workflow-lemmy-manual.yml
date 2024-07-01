@@ -10,27 +10,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Change directory to workspace
-        uses: nick-fields/retry@v3
+        uses: Wandalen/wretry.action@v3
         with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 120
           command: |
             cd "${GITHUB_WORKSPACE}"
       - name: Install requirements for Lemmy
-        uses: nick-fields/retry@v3
+        uses: Wandalen/wretry.action@v3
         with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 120
           command: |
             pip install -r ./requirements.txt
       - name: Run Lemmy
-        uses: nick-fields/retry@v3
+        uses: Wandalen/wretry.action@v3
         with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 120
           command: |
             export LEMMY_USERNAME="${{ secrets.LEMMY_USERNAME }}"
             export LEMMY_PASSWORD="${{ secrets.LEMMY_PASSWORD }}"
